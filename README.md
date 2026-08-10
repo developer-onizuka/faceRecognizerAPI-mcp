@@ -1,0 +1,124 @@
+# MCP Serverをローカルで動かす
+
+# 0. 必要なもの
+メモリ24GB程度のノートPC 1台<br>
+
+# 1. Goal
+
+# 2. 各ノードのスペック
+| Node名 | CPU | Memory | IP Address |
+|---|---|---|---|
+| master | 4 | 8GB | 192.168.33.100 |
+| worker1 | 4 | 8GB | 192.168.33.101 |
+
+# 3. 手順
+### 3-1. Hypervisorのインストール
+>https://www.oracle.com/jp/virtualization/technologies/vm/downloads/virtualbox-downloads.html
+
+### 3-2. Vagrantのインストール
+>https://developer.hashicorp.com/vagrant/install
+
+### 3-3. gitのインストール & git clone
+>https://git-scm.com/downloads
+```
+git clone https://github.com/developer-onizuka/strands-agents
+cd strands-agents 
+```
+
+### 3-4. 仮想マシンの展開
+### 3-4-1. Master node / Worker node
+```
+cd kubernetes
+vagrant up
+cd ..
+```
+### 3-4-2. NFSサーバー
+```
+cd nfs
+vagrant up
+cd ..
+```
+
+### 3-5. Master nodeへのログイン & git clone
+```
+cd kubernetes
+vagrant ssh master
+git clone https://github.com/developer-onizuka/strands-agents
+cd strands-agents
+```
+
+### 3-6. Kubernetesクラスタの確認
+```
+kubectl get nodes -A -o wide
+kubectl get pods -A -o wide
+```
+```
+$ kubectl get nodes -A -o wide
+NAME      STATUS   ROLES           AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
+master    Ready    control-plane   67m   v1.33.3   192.168.33.100   <none>        Ubuntu 24.04.2 LTS   6.8.0-53-generic   containerd://1.7.27
+worker1   Ready    node            67m   v1.33.3   192.168.33.101   <none>        Ubuntu 24.04.2 LTS   6.8.0-53-generic   containerd://1.7.27
+```
+```
+$ kubectl get pods -A -o wide
+NAMESPACE        NAME                                       READY   STATUS    RESTARTS   AGE   IP               NODE      NOMINATED NODE   READINESS GATES
+kube-system      calico-kube-controllers-7498b9bb4c-lngsr   1/1     Running   0          67m   10.10.219.66     master    <none>           <none>
+kube-system      calico-node-4wbbs                          1/1     Running   0          67m   192.168.33.101   worker1   <none>           <none>
+kube-system      calico-node-8bt9k                          1/1     Running   0          67m   192.168.33.100   master    <none>           <none>
+kube-system      coredns-674b8bbfcf-5strr                   1/1     Running   0          67m   10.10.219.67     master    <none>           <none>
+kube-system      coredns-674b8bbfcf-kqn54                   1/1     Running   0          67m   10.10.219.65     master    <none>           <none>
+kube-system      csi-nfs-controller-8fdc6755d-78qxc         5/5     Running   0          46m   192.168.33.101   worker1   <none>           <none>
+kube-system      csi-nfs-node-kjqnr                         3/3     Running   0          46m   192.168.33.100   master    <none>           <none>
+kube-system      csi-nfs-node-x2g8q                         3/3     Running   0          46m   192.168.33.101   worker1   <none>           <none>
+kube-system      etcd-master                                1/1     Running   0          67m   192.168.33.100   master    <none>           <none>
+kube-system      kube-apiserver-master                      1/1     Running   0          67m   192.168.33.100   master    <none>           <none>
+kube-system      kube-controller-manager-master             1/1     Running   0          67m   192.168.33.100   master    <none>           <none>
+kube-system      kube-proxy-2xdcj                           1/1     Running   0          67m   192.168.33.101   worker1   <none>           <none>
+kube-system      kube-proxy-slq7w                           1/1     Running   0          67m   192.168.33.100   master    <none>           <none>
+kube-system      kube-scheduler-master                      1/1     Running   0          67m   192.168.33.100   master    <none>           <none>
+metallb-system   controller-58fdf44d87-66bfg                1/1     Running   0          67m   10.10.235.129    worker1   <none>           <none>
+metallb-system   speaker-ldcz4                              1/1     Running   0          67m   192.168.33.100   master    <none>           <none>
+metallb-system   speaker-v8vn6                              1/1     Running   0          67m   192.168.33.101   worker1   <none>           <none>
+```
+### 3-7. ロードバランサーの設定
+ロードバランサーに割り当てるIPアドレスの範囲を指定します。
+```
+kubectl apply -f metallb-ipaddress.yaml
+```
+なお、ロードバランサーは、各worker nodeに展開されたServiceに均等にアクセスされるようにするものです。今回の例ではworker nodeが１つしかないため単なる外部通信のための出口としての機能しかないように見えます。<br>
+<img src="https://github.com/developer-onizuka/openwebui-ollama/blob/main/type-loadbalancer.png" width="880">
+
+
+### 3-8. MCP Serverを動かすPodを起動する
+```
+git clone https://github.com/developer-onizuka/faceRecongnizerAPI-mcp
+cd faceRecognizerAPI-mcp/
+kubectl apply -f mcp.yaml
+```
+
+### 3-9. Login
+```
+kubectl exec -it pods/mcp-xxxxxxxxxx-xxxxx -- /bin/bash
+```
+
+### 3-10. faceRecognizerAPIを起動する
+```
+git clone https://github.com/developer-onizuka/faceRecongnizerAPI
+cd faceRecognizerAPI/
+python3 faceRecognizerAPI.py 
+```
+
+### 3-11. MCP Serverを起動する
+別ターミナルを開き、Podにログインする。
+```
+git clone https://github.com/developer-onizuka/faceRecongnizerAPI-mcp
+python3 app-mcp.py
+```
+
+### 3-12. Inspectorによるテスト
+PC側（Claude Desktopを実行するクライアント側）でターミナルを開き、以下を実行する。この際、Node.jsをインストールしておく必要がある。
+```
+npx @modelcontextprotocol/inspector http://192.168.33.3:5001/sse
+```
+
+
+
