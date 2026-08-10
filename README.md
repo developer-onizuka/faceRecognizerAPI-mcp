@@ -88,18 +88,20 @@ kubectl apply -f mcp.yaml
 kubectl exec -it pods/mcp-xxxxxxxxxx-xxxxx -- /bin/bash
 ```
 
-### 3-10. faceRecognizerAPIを起動する
-```
-git clone https://github.com/developer-onizuka/faceRecongnizerAPI
-cd faceRecognizerAPI/
-python3 faceRecognizerAPI.py 
-```
-
-### 3-11. MCP Serverを起動する
-別ターミナルを開き、Podにログインする。
+### 3-10. MCP Serverを起動する
 ```
 git clone https://github.com/developer-onizuka/faceRecongnizerAPI-mcp
+cd faceRecognizerAPI-mcp
+./install-mcp-module.sh
 python3 app-mcp.py
+```
+
+### 3-11. faceRecognizerAPIを起動する
+別ターミナルを開き、Podにログインする。
+```
+git clone https://github.com/developer-onizuka/faceRecognizerAPI
+cd faceRecognizerAPI/
+python3 faceRecognizerAPI.py 
 ```
 
 ### 3-12. Inspectorによるテスト
