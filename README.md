@@ -117,9 +117,9 @@ kubernetes   ClusterIP      10.96.0.1     <none>         443/TCP          6h15m
 svc-mcp      LoadBalancer   10.97.226.6   192.168.33.3   5001:31904/TCP   6h
 ```
 すると以下のようにブラウザが立ち上がり、MCPの機能をデバックできるようになる。<br>
-<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector0.png" width="720"><br>
-<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector1.png" width="720"><br>
-<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector2.png" width="720"><br>
-<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector3.png" width="720"><br>
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector0.png" width="720"><br><br>
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector1.png" width="720"><br><br>
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector2.png" width="720"><br><br>
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector3.png" width="720"><br><br>
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector4.png" width="720"><br>
 
