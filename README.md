@@ -21,20 +21,13 @@
 ### 3-3. gitのインストール & git clone
 >https://git-scm.com/downloads
 ```
-git clone https://github.com/developer-onizuka/strands-agents
-cd strands-agents 
+git clone https://github.com/developer-onizuka/faceRecognizerAPI-mcp
+cd faceRecognizerAPI-mcp
 ```
 
-### 3-4. 仮想マシンの展開
-### 3-4-1. Master node / Worker node
+### 3-4. Master node / Worker nodeを起動する
 ```
 cd kubernetes
-vagrant up
-cd ..
-```
-### 3-4-2. NFSサーバー
-```
-cd nfs
 vagrant up
 cd ..
 ```
@@ -43,8 +36,8 @@ cd ..
 ```
 cd kubernetes
 vagrant ssh master
-git clone https://github.com/developer-onizuka/strands-agents
-cd strands-agents
+git clone https://github.com/developer-onizuka/faceRecognizerAPI-mcp
+cd faceRecognizerAPI-mcp
 ```
 
 ### 3-6. Kubernetesクラスタの確認
@@ -84,14 +77,9 @@ metallb-system   speaker-v8vn6                              1/1     Running   0 
 ```
 kubectl apply -f metallb-ipaddress.yaml
 ```
-なお、ロードバランサーは、各worker nodeに展開されたServiceに均等にアクセスされるようにするものです。今回の例ではworker nodeが１つしかないため単なる外部通信のための出口としての機能しかないように見えます。<br>
-<img src="https://github.com/developer-onizuka/openwebui-ollama/blob/main/type-loadbalancer.png" width="880">
-
 
 ### 3-8. MCP Serverを動かすPodを起動する
 ```
-git clone https://github.com/developer-onizuka/faceRecongnizerAPI-mcp
-cd faceRecognizerAPI-mcp/
 kubectl apply -f mcp.yaml
 ```
 
@@ -119,6 +107,12 @@ PC側（Claude Desktopを実行するクライアント側）でターミナル�
 ```
 npx @modelcontextprotocol/inspector http://192.168.33.3:5001/sse
 ```
-
+なおIPアドレスは以下で確認したものを用いる。
+```
+$ kubectl get services
+NAME         TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)          AGE
+kubernetes   ClusterIP      10.96.0.1     <none>         443/TCP          6h15m
+svc-mcp      LoadBalancer   10.97.226.6   192.168.33.3   5001:31904/TCP   6h
+```
 
 
