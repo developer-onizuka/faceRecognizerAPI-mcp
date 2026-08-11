@@ -107,14 +107,14 @@ python3 faceRecognizerAPI.py
 ### 3-12. Inspectorによるテスト
 PC側（Claude Desktopを実行するクライアント側）でターミナルを開き、以下を実行する。この際、Node.jsをインストールしておく必要がある。
 ```
-npx @modelcontextprotocol/inspector http://192.168.33.3:5001/sse
+npx @modelcontextprotocol/inspector http://192.168.33.2:5001/sse
 ```
 なおIPアドレスは以下で確認したものを用いる。
 ```
 $ kubectl get services
 NAME         TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)          AGE
 kubernetes   ClusterIP      10.96.0.1     <none>         443/TCP          6h15m
-svc-mcp      LoadBalancer   10.97.226.6   192.168.33.3   5001:31904/TCP   6h
+svc-mcp      LoadBalancer   10.97.226.6   192.168.33.2   5001:31904/TCP   6h
 ```
 すると以下のようにブラウザが立ち上がり、MCPの機能をデバックできるようになる。<br>
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector0.png" width="720"><br><br>
@@ -123,3 +123,30 @@ svc-mcp      LoadBalancer   10.97.226.6   192.168.33.3   5001:31904/TCP   6h
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector3.png" width="720"><br><br>
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector4.png" width="720"><br>
 
+### 3-13. Claude Desktopの起動
+claude_desktop_config.jsonに以下を記述した後、Claude Desktopを起動。コネクタとしてface-recognizerが登録されているかを確認する。
+```
+  "mcpServers": {
+    "face-recognizer": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "http://192.168.33.2:5001/sse",
+        "--allow-http"
+      ]
+    }
+  },
+```
+
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/claudeDesktop-Connector.png" width="720"><br>
+
+### 3-14. プロンプトの入力
+```
+顔の位置を特定してください。ファイルパスは/faceRecognizerAPI-mcp/Bill.jpgです。
+```
+なお、このBill.jpgというファイルは3-10でhttps://github.com/developer-onizuka/faceRecognizerAPI-mcpをCloneした際に当該ディレクトリ内に保存されているものです。必要に応じてファイルを入れ替えてください。
+
+プロンプト入力後、当該MCPサーバーの許可が求められ、以下のように顔の座標が表示されれば成功です。
+
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/claudeDesktop-MCP.png" width="720"><br>
