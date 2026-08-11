@@ -13,9 +13,6 @@ Stdio方式ではクライアント端末ごとにプログラムの配置や依
 - 実行環境の完全な分離とスケーラビリティ<br>
 クライアント側のマシンリソースを消費せず、サーバー側の高スペックなGPUやCPUリソースを活用した重い処理が可能。
 
-- 可用性とマルチクライアント対応への拡張性<br>
-複数のMCPクライアントからのリクエストを効率的にルーティングしたり、サーバー側で障害が発生した際の自動復旧やスケーリングし易い。
-
 ```
 +-----------------------+              +-------------------------+
 |   Claude Desktop      |              |      Kubernetes         |
@@ -184,3 +181,37 @@ kubectl cp new.jpg -n default mcp-xxxxxxxxxx-xxxxx:/faceRecognizerAPI-mcp/new.jp
 プロンプト入力後、当該MCPサーバーの許可が求められ、以下のように顔の座標が表示されれば成功となる。
 
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/claudeDesktop-MCP.png" width="720"><br>
+
+# 4. まとめ
+- MCPクライアント・サーバー間のバイナリ非対応<br> 
+Claude DesktopなどのMCPクライアントとMCPサーバーの間では、現時点でバイナリファイルの直接的な送受信がプロトコルとして規定されていない。
+
+- ファイルパス指定に至った経緯<br>
+当初はプロンプトにイメージファイルを直接添付してMCPサーバーとの連動を試みたが失敗した。次に、MCP通信がJSONベースで行われる仕様を踏まえ、画像をBase64形式にエンコードしてASCII文字列としてやり取りを試みたが、これもうまくいかなかった。なお、以下がそのJSONベースのやりとりとなる。<br>
+
+- リクエスト（ツール呼び出し）
+```
+{
+  "tool": "face-recognizer:detect_faces",
+  "parameters": {
+    "image_path": "/faceRecognizerAPI-mcp/Bill.jpg"
+  }
+}
+```
+- レスポンス（ツール結果）
+```
+{
+  "facePositions": [
+    [
+      270,
+      444,
+      563,
+      150
+    ]
+  ]
+}
+```
+
+結果として、イメージファイルそのものを送受信するのではなく、MCPサーバーでアクセス可能なファイルパスをテキストで伝達するような手続きをMCPサーバーのPythonスクリプトに記述している。
+
+
