@@ -1,4 +1,4 @@
-# MCP ServerをKubernetesで動かす
+# MCP Serverを自作してKubernetesで動かす
 
 # 0. 必要なもの
 メモリ24GB程度のノートPC 1台<br>
