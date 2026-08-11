@@ -145,7 +145,7 @@ claude_desktop_config.jsonに以下を記述した後、Claude Desktopを起動�
 ```
 顔の位置を特定してください。ファイルパスは/faceRecognizerAPI-mcp/Bill.jpgです。
 ```
-なお、このBill.jpgというファイルは3-10でhttps://github.com/developer-onizuka/faceRecognizerAPI-mcpをCloneした際に当該ディレクトリ内に保存されているものです。必要に応じてファイルを入れ替えてください。
+なお、このBill.jpgというファイルは手順3-10で、faceRecognizerAPI-mcpをCloneした際に当該ディレクトリ内に保存されているものです。必要に応じてファイルを入れ替えてください。
 
 プロンプト入力後、当該MCPサーバーの許可が求められ、以下のように顔の座標が表示されれば成功です。
 
