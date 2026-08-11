@@ -35,3 +35,10 @@ spec:
         command: ["sleep", "infinity"]
         ports:
         - containerPort: 5001
+        volumeMounts:
+        - name: mcp-csi-data
+          mountPath: /tmp
+      volumes:
+      - name: mcp-csi-data
+        persistentVolumeClaim:
+          claimName: pvc-nfs-mcp
