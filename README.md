@@ -90,7 +90,7 @@ kubectl exec -it pods/mcp-xxxxxxxxxx-xxxxx -- /bin/bash
 
 ### 3-10. MCP Serverを起動する
 ```
-git clone https://github.com/developer-onizuka/faceRecongnizerAPI-mcp
+git clone https://github.com/developer-onizuka/faceRecognizerAPI-mcp
 cd faceRecognizerAPI-mcp
 ./install-mcp-module.sh
 python3 app-mcp.py
