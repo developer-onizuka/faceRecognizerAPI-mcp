@@ -4,7 +4,7 @@
 メモリ24GB程度のノートPC 1台<br>
 
 # 1. Goal
-リモートサーバーとしてSSE（Server-Sent Events）方式のMCPサーバーを構築し、Claude Desktop等のLLMクライアントへリモートのツールとして統合的に提供する。
+リモートサーバーとしてSSE方式で自作のMCPサーバーを公開し、Claude Desktop等のLLMクライアントへリモートのツールとして統合的に提供する。
 
 #### Stdio方式と比較したSSE方式のメリット（エンタープライズ性の向上）
 - MCPサーバーの一元管理<br>
