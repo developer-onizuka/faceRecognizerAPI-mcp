@@ -149,6 +149,9 @@ cd faceRecognizerAPI/
 python3 faceRecognizerAPI.py 
 ```
 
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/Fukuzawa.png" width="480"><br>
+
+
 ### 3-12. Inspectorによるテスト
 PC側（Claude Desktopを実行するクライアント側）でターミナルを開き、以下を実行する。この際、Node.jsをインストールしておく必要がある。
 ```
