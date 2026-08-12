@@ -128,7 +128,7 @@ kubectl apply -f metallb-ipaddress.yaml
 kubectl apply -f mcp.yaml
 ```
 
-### 3-9. Login
+### 3-9. PodにLogin
 ```
 kubectl exec -it pods/mcp-xxxxxxxxxx-xxxxx -- /bin/bash
 ```
@@ -142,7 +142,7 @@ python3 app-mcp.py
 ```
 
 ### 3-11. faceRecognizerAPIを起動する
-別ターミナルを開き、Podにログインする。
+別ターミナルを開き、Podにログインする。なお、faceRecognizerは、HTTP POSTを利用したWeb API。画像ファイルを送信することで、顔の座標を取得するもの。
 ```
 git clone https://github.com/developer-onizuka/faceRecognizerAPI
 cd faceRecognizerAPI/
