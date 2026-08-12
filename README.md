@@ -4,11 +4,11 @@
 メモリ24GB程度のノートPC 1台<br>
 
 # 1. Goal
-リモートサーバーとしてSSE方式で自作のMCPサーバーを公開し、Claude Desktop等のLLMクライアントへリモートのツールとして提供する。
+リモートサーバーとしてSSE方式で自作のMCPサーバーを公開し、Claude Desktop等のLLMクライアントへツールを提供すること。
 
 #### Stdio方式と比較したSSE方式のメリット（エンタープライズ性の向上）
 - MCPサーバーの一元管理<br>
-Stdio方式ではクライアント端末ごとにプログラムの配置や依存関係のアップデートが必要になるが、SSE方式であればKubernetes上のサーバー側を更新するだけで、すべてのクライアントに最新のMCPサーバーの機能や改修を即座に反映。
+Stdio方式ではクライアント端末ごとにプログラムの配置や依存関係のアップデートが必要になるが、SSE方式であればサーバー側を更新するだけで、すべてのクライアントに最新のMCPサーバーの機能や改修を即座に反映。
 
 - 実行環境の完全な分離とスケーラビリティ<br>
 クライアント側のマシンリソースを消費せず、サーバー側の高スペックなGPUやCPUリソースを活用した重い処理が可能。
@@ -135,14 +135,14 @@ python3 faceRecognizerAPI.py
 ### 3-12. Inspectorによるテスト
 PC側（Claude Desktopを実行するクライアント側）でターミナルを開き、以下を実行する。この際、Node.jsをインストールしておく必要がある。
 ```
-npx @modelcontextprotocol/inspector http://192.168.33.2:5001/sse
+npx @modelcontextprotocol/inspector http://192.168.33.3:5001/sse
 ```
 なおIPアドレスは以下で確認したものを用いる。
 ```
 $ kubectl get services
 NAME         TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)          AGE
 kubernetes   ClusterIP      10.96.0.1     <none>         443/TCP          6h15m
-svc-mcp      LoadBalancer   10.97.226.6   192.168.33.2   5001:31904/TCP   6h
+svc-mcp      LoadBalancer   10.97.226.6   192.168.33.3   5001:31904/TCP   6h
 ```
 すると以下のようにブラウザが立ち上がり、MCPの機能をデバックできるようになる。<br>
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/inspector0.png" width="720"><br><br>
@@ -183,8 +183,8 @@ kubectl cp new.jpg -n default mcp-xxxxxxxxxx-xxxxx:/faceRecognizerAPI-mcp/new.jp
 
 # 4. まとめ
 #### MCPクライアント・サーバー間のバイナリ非対応
-Claude DesktopなどのMCPクライアントとMCPサーバーの間では、現時点でバイナリファイルの直接的な送受信がプロトコルとして規定されていない。当初はプロンプトにイメージファイルを直接添付してMCPサーバーとの連動を試みたが失敗した。次に、MCP通信がJSONベースで行われる仕様を踏まえ、画像をBase64形式にエンコードしてASCII文字列としてやり取りを試みたが、これもうまくいかなかった。ASCII文字列が長すぎるためと考えられる。なお、以下がそのJSONベースのやりとりとなる。<br>
-結果として、イメージファイルそのものを送受信するのではなく、MCPサーバーでアクセス可能なファイルパスをテキストで伝達するような手続きをMCPサーバーのPythonスクリプトに記述している。
+Claude DesktopなどのMCPクライアントとMCPサーバーの間では、現時点でバイナリファイルの直接的な送受信がプロトコルとして規定されていない。当初はプロンプトにイメージファイルを直接添付してMCPサーバーとの連動を試みたが失敗した。次に、MCP通信がJSONベースで行われる仕様を踏まえ、画像をBase64形式にエンコードしてASCII文字列としてやり取りを試みたが、これもうまくいかなかった。ASCII文字列が長すぎるためと考えられる。<br>
+結果として、イメージファイルそのものを送受信するのではなく、MCPサーバーでアクセス可能なファイルパスをテキストで伝達するような手続きをMCPサーバーのPythonスクリプトに記述している。なお、以下がそのJSONベースのやりとりとなる。
 
 - リクエスト（ツール呼び出し）
 ```
