@@ -269,11 +269,11 @@ LLM自身にあらゆる処理を抱え込ませるのではなく、何を実�
 
 以下は、MCPクライアントとして5ire (https://5ire.app/) を活用した実証例である。Kubernetes上のOllamaで軽量なローカルLLM（llama3.2:3b）を稼働させ、リモートのMCPサーバーと連携させている。
 
-- LLMの設定画面。外部ツールを使えるように設定する。
+- LLMの設定画面。外部ツールを使えるように設定する。<br>
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/5ire-llama3.2.png" width="720"><br>
 
-- MCPサーバーの設定画面。
+- MCPサーバーの設定画面。<br>
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/5ire-tool.png" width="480"><br>
 
-- LLMと連携させて、顔の位置を特定させた結果。
+- LLMと連携させて、顔の位置を特定させた結果。<br>
 <img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/5ire-result.png" width="720"><br>
