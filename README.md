@@ -267,3 +267,10 @@ Claude DesktopなどのMCPクライアントとMCPサーバーの間では、現
 適切なMCPサーバーを導入することにより、エッジデバイス等の非力な実行環境や軽量な小規模LLMであっても、モデル自体の巨大化や再学習に多大なコストやリソースを投じることなく、高度な外部処理をオフロードして目的を完遂させることが可能となる。
 LLM自身にあらゆる処理を抱え込ませるのではなく、何を実行すべきかの判断をLLMに担わせ、画像認識や専門的な計算といった処理を外部のMCPサーバーに切り離すアプローチは、極めて合理的かつ実用的なシステム設計である。この手法により、開発・運用のコストを大幅に抑制しながら、ハルシネーションのリスクを軽減し、リソースの限られた環境やローカル環境においても高度なAIエージェントを堅牢に稼働させることができる。
 
+以下は、MCPクライアントとして5ire (https://5ire.app/) を活用した実証例である。Kubernetes上のOllamaで軽量なローカルLLM（llama3.2:3b）を稼働させ、リモートのMCPサーバーと連携させている。
+
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/5ire-llama3.2.png" width="720"><br>
+
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/5ire-tool.png" width="720"><br>
+
+<img src="https://github.com/developer-onizuka/faceRecognizerAPI-mcp/blob/main/5ire-result.png" width="720"><br>
