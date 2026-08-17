@@ -64,20 +64,20 @@ Anthropic Cloud                               Client PC (Local Environment)
 |  |     [ LLM ]     |<------------  [Your Prompt]                                      |
 |  | (Claude 3.5 etc)|  |       |  +---------------+                                    |
 |  |                 |------------>|  MCP Client   |                                    |
-|  +-----------------+  |       |  +---------------+                                    |
+|  +-----------------+  |       |  +-------+-------+                                    |
 +-----------------------+       |          |                                            |
                                 |          |  mcp-stdio                                 |
                                 |          |  (Standard I/O)                            |
-                                |          v                                            |
-                                |  +-----------------+             Local Storage        |
+                                |          |                                            |
+                                |  +-------V---------+             Local Storage        |
                                 |  | Local Process:  |  Data Req  +-------------------+ |
                                 |  | mcp-server      |----------->| Email Draft /     | |
                                 |  | (app-mcp.py)    |<-----------| Attachments (PDF) | |
                                 |  +-------+---------+  Data Read +-------------------+ |
                                 |          |                                            |
                                 |          | Direct Invocation                          |
-                                |          v                                            |
-                                |  +---------------------------------+                  |
+                                |          |                                            |
+                                |  +-------V-------------------------+                  |
                                 |  | Local Mail Script / Mailer API  |                  |
                                 |  | (SMTP / Sendmail / Outlook CLI) |                  |
                                 |  +---------------------------------+                  |
